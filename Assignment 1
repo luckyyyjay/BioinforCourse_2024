@@ -1,5 +1,7 @@
 Task 1 - Literature
 1. Assigned paper: Edahiro, R., Shirai, Y., Takeshima, Y. et al. Single-cell analyses and host genetics highlight the role of innate immune cells in COVID-19 severity. Nat Genet 55, 753–767 (2023). https://doi.org/10.1038/s41588-023-01375-1
+        
+        
 https://www.nature.com/articles/s41588-023-01375-1.
 2. Answer the following questions
 a. What is the medically relevant insight from the article?
@@ -18,4 +20,266 @@ extend the analysis presented in the paper.
 (3) In addition to ncMono and the IFN-γ signaling pathway, are there other immune cells or molecules involved in the severity of COVID-19, and how do they interact with ncMono? 
 
 Task 2 - Git repositories and R Markdown
-Git repository: 
+Git repository: https://github.com/luckyyyjay/BioinforCourse_2024
+
+Task 3 - Introduction to R and online R course
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install()
+
+install.packages("tidyverse")
+library(BiocManager)
+library(tidyverse)
+
+Task 4 - Using R example datasets
+> #Load the dataset:
+> data(CO2)
+
+> #Get dataset information:
+> help(CO2)
+
+> #Calculate the average and median CO2 uptake for plants from Quebec and Mississippi:
+> #Quebec plants CO2 uptake:
+> quebec_data <- subset(CO2, Type == "Quebec")
+> mean_quebec <- mean(quebec_data$uptake)
+> median_quebec <- median(quebec_data$uptake)
+> print(paste("Mean CO2 uptake for Quebec plants:", mean_quebec))
+[1] "Mean CO2 uptake for Quebec plants: 33.5428571428571"
+> print(paste("Median CO2 uptake for Quebec plants:", median_quebec))
+[1] "Median CO2 uptake for Quebec plants: 37.15"
+
+> #Mississippi plants CO2 uptake:
+> mississippi_data <- subset(CO2, Type == "Mississippi")
+> mean_mississippi <- mean(mississippi_data$uptake)
+> median_mississippi <- median(mississippi_data$uptake)
+> print(paste("Mean CO2 uptake for Mississippi plants:", mean_mississippi))
+[1] "Mean CO2 uptake for Mississippi plants: 20.8833333333333"
+> print(paste("Median CO2 uptake for Mississippi plants:", median_mississippi))
+[1] "Median CO2 uptake for Mississippi plants: 19.3"
+
+Task 5 - R Functions
+1. Write a function that calculates the ratio of the mean and the median of a given vector.
+
+> # Function to calculate the ratio of the mean and median of a vector
+> ratio_mean_median <- function(x) {
++   mean_value <- mean(x, na.rm = TRUE)
++   median_value <- median(x, na.rm = TRUE)
++   return(mean_value / median_value)
++ }
+> # Example1：vector with no outliers
+> test_vector1 <- c(10, 20, 30, 40, 50)
+> result1 <- ratio_mean_median(test_vector1)
+> print(paste("Mean/Median ratio for test_vector1:", result1))
+[1] "Mean/Median ratio for test_vector1: 1"
+> # Example2：vector with outliers
+> test_vector2 <- c(10, 20, 30, 40, 1000)
+> result2 <- ratio_mean_median(test_vector2)
+> print(paste("Mean/Median ratio for test_vector2:", result2))
+[1] "Mean/Median ratio for test_vector2: 7.33333333333333"
+
+2. Write a function that ignores the lowest and the highest value from a given vector and calculate the mean.
+
+> # Function to ignore the lowest and the highest value from a given vector and calculate the mean.
+> trimmed_mean <- function(x) {
++   sorted_x <- sort(x)
++   trimmed_x <- sorted_x[-c(1, length(sorted_x))]
++   return(mean(trimmed_x, na.rm = TRUE))
++ }
+> # Example3：vector with no outliers
+> test_vector3 <- c(10, 20, 30, 40, 50)
+> result3 <- trimmed_mean(test_vector3)
+> print(paste("Trimmed mean for test_vector3:", result3))
+[1] "Trimmed mean for test_vector3: 30"
+> # Example4：vector with outliers
+> test_vector4 <- c(10, 20, 30, 40, 1000)
+> result4 <- trimmed_mean(test_vector4)
+> print(paste("Trimmed mean for test_vector4:", result4))
+[1] "Trimmed mean for test_vector4: 30"
+
+3. Read about piping from here:https://r4ds.had.co.nz/pipes.html
+
+Piping allows you to pass the result of one function directly to another, simplifying code and making it more readable. It is best used for sequential operations but should be avoided in complex scenarios where the logic can become harder to follow.
+
+4. Familiarize yourself with the apply-family of functions (apply, lapply, sapply etc.)
+
+The apply-family (apply, lapply, sapply, etc.) helps you perform repetitive operations on lists, arrays, or matrices without explicit loops. These functions are useful for simplifying code and improving efficiency when processing large datasets.
+
+Task 6 - Basic visualization with R
+#1. Compare the distributions of body heights (lengths) of the two species from magic_guys.csv dataset:
+magic_guys <- read.csv("C:/Wei/WEI ZHENJIE/Assignment1/magic_guys.csv")
+
+# Separate the two species
+species1_data <- subset(magic_guys, species == "jedi")
+species2_data <- subset(magic_guys, species == "sith")
+
+hist(species1_data$length, breaks = 10, main = "Jedi Length Distribution", xlab = "Length", col = "blue")
+hist(species1_data$weight, breaks = 10, main = "Jedi Weight Distribution", xlab = "Weight", col = "blue")
+
+hist(species2_data$length, breaks = 10, main = "Sith Length Distribution", xlab = "Length", col = "red")
+hist(species2_data$weight, breaks = 10, main = "Sith Weight Distribution", xlab = "Weight", col = "red")
+
+library(ggplot2)
+
+ggplot(magic_guys, aes(x = length, fill = species)) +
+  geom_histogram(position = "dodge", binwidth = 10) +
+  labs(title = "Length Distribution by Species", x = "Length", y = "Frequency") +
+  theme_minimal()
+
+ggplot(magic_guys, aes(x = weight, fill = species)) +
+  geom_histogram(position = "dodge", binwidth = 5) +
+  labs(title = "Weight Distribution by Species", x = "Weight", y = "Frequency") +
+  theme_minimal()
+
+ggplot(magic_guys, aes(x = species, y = length, fill = species)) +
+  geom_boxplot() +
+  labs(title = "Length Comparison between Jedi and Sith", x = "Species", y = "Length") +
+  theme_minimal()
+
+ggplot(magic_guys, aes(x = species, y = weight, fill = species)) +
+  geom_boxplot() +
+  labs(title = "Weight Comparison between Jedi and Sith", x = "Species", y = "Weight") +
+  theme_minimal()
+
+#PNG
+png("length_distribution_jedi_sith.png", width = 800, height = 600)
+ggplot(magic_guys, aes(x = length, fill = species)) +
+  geom_histogram(position = "dodge", binwidth = 10) +
+  labs(title = "Length Distribution by Species", x = "Length", y = "Frequency") +
+  theme_minimal()
+dev.off()
+
+#PDF
+pdf("length_distribution_jedi_sith.pdf", width = 8, height = 6)
+ggplot(magic_guys, aes(x = length, fill = species)) +
+  geom_histogram(position = "dodge", binwidth = 10) +
+  labs(title = "Length Distribution by Species", x = "Length", y = "Frequency") +
+  theme_minimal()
+dev.off()
+
+#SVG
+svg("length_distribution_jedi_sith.svg", width = 8, height = 6)
+ggplot(magic_guys, aes(x = length, fill = species)) +
+  geom_histogram(position = "dodge", binwidth = 10) +
+  labs(title = "Length Distribution by Species", x = "Length", y = "Frequency") +
+  theme_minimal()
+dev.off()
+
+#2. Load gene expression data matrix from microarray_data.tab dataset (this is a large tabular dataset):
+
+microarray_data <- read.table("C:/Wei/WEI ZHENJIE/Assignment1/microarray_data.tab", sep = "\t", header = TRUE)
+dim(microarray_data)  # Get number of rows and columns
+
+missing_values <- rowSums(is.na(microarray_data))
+barplot(missing_values, main = "Missing Values per Gene", xlab = "Genes", ylab = "Number of Missing Values")
+
+total_samples <- ncol(microarray_data)
+
+genes_10 <- which(rowSums(is.na(microarray_data)) / total_samples > 0.1)
+genes_20 <- which(rowSums(is.na(microarray_data)) / total_samples > 0.2)
+genes_50 <- which(rowSums(is.na(microarray_data)) / total_samples > 0.5)
+
+print(length(genes_10))  # Genes with more than 10% missing values
+print(length(genes_20))  # Genes with more than 20% missing values
+print(length(genes_50))  # Genes with more than 50% missing values
+
+#3. Visualize the data in the CO2 dataset to gain a deeper understanding:
+data(CO2)
+ggplot(CO2, aes(x = conc, y = uptake, color = Type)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "CO2 Uptake vs Concentration", x = "CO2 Concentration", y = "CO2 Uptake") +
+  theme_minimal()
+
+Task 7
+
+devtools::install_github("hirscheylab/tidybiology")
+library(tidybiology)
+
+# Load the chromosome dataset
+data("chromosome")
+
+str(chromosome)
+
+
+# Extract summary statistics for variations, protein_coding_genes, and miRNAs
+chromosome_summary <- chromosome %>%
+  summarise(
+    mean_variations = mean(variations, na.rm = TRUE),
+    median_variations = median(variations, na.rm = TRUE),
+    max_variations = max(variations, na.rm = TRUE),
+    
+    mean_protein_genes = mean(protein_codinggenes, na.rm = TRUE),  # 使用正确的列名
+    median_protein_genes = median(protein_codinggenes, na.rm = TRUE),
+    max_protein_genes = max(protein_codinggenes, na.rm = TRUE),
+    
+    mean_miRNAs = mean(mi_rna, na.rm = TRUE),  # 使用正确的列名
+    median_miRNAs = median(mi_rna, na.rm = TRUE),
+    max_miRNAs = max(mi_rna, na.rm = TRUE)
+  )
+
+
+print(chromosome_summary)
+
+#b. Visualizing the distribution of chromosome size:
+library(ggplot2)
+
+# Create a histogram to visualize the distribution of chromosome sizes
+ggplot(chromosome, aes(x = basepairs)) +
+  geom_histogram(binwidth = 10000000, fill = "skyblue", color = "black", alpha = 0.7) +
+  labs(title = "Chromosome Size Distribution", 
+       x = "Size (Base Pairs)", 
+       y = "Frequency") +
+  theme_minimal()
+
+#Correlation between Protein Coding Genes and Chromosome Size:
+# Scatter plot of protein coding genes vs chromosome size
+ggplot(chromosome, aes(x = basepairs, y = protein_codinggenes)) +
+  geom_point(color = "blue", size = 3, alpha = 0.6) +  # Scatter points
+  geom_smooth(method = "lm", color = "red") +  # Add a linear trend line
+  labs(title = "Protein Coding Genes vs Chromosome Size", 
+       x = "Chromosome Size (Base Pairs)", 
+       y = "Protein Coding Genes") +
+  theme_minimal()
+
+#Correlation between miRNAs and Chromosome Size:
+# Scatter plot of miRNAs vs chromosome size
+ggplot(chromosome, aes(x = basepairs, y = mi_rna)) +
+  geom_point(color = "green", size = 3, alpha = 0.6) +  # Scatter points
+  geom_smooth(method = "lm", color = "red") +  # Add a linear trend line
+  labs(title = "miRNAs vs Chromosome Size", 
+       x = "Chromosome Size (Base Pairs)", 
+       y = "miRNAs") +
+  theme_minimal()
+
+
+# Load the proteins dataset
+data("proteins")
+str(proteins)
+
+library(dplyr)
+
+# Extract summary statistics for length and mass
+proteins_summary <- proteins %>%
+  summarise(
+    mean_length = mean(length, na.rm = TRUE),
+    median_length = median(length, na.rm = TRUE),
+    max_length = max(length, na.rm = TRUE),
+    
+    mean_mass = mean(mass, na.rm = TRUE),
+    median_mass = median(mass, na.rm = TRUE),
+    max_mass = max(mass, na.rm = TRUE)
+  )
+
+print(proteins_summary)
+
+library(ggplot2)
+
+# Scatter plot of length vs mass
+ggplot(proteins, aes(x = length, y = mass)) +
+  geom_point(color = "purple", size = 3, alpha = 0.6) +  # Scatter points
+  geom_smooth(method = "lm", color = "orange") +  # Add a linear trend line
+  labs(title = "Protein Length vs Mass", 
+       x = "Length (Amino Acids)", 
+       y = "Mass (kDa)") +
+  theme_minimal()
+
