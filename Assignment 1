@@ -1,1 +1,21 @@
+Task 1 - Literature
+1. Assigned paper: Edahiro, R., Shirai, Y., Takeshima, Y. et al. Single-cell analyses and host genetics highlight the role of innate immune cells in COVID-19 severity. Nat Genet 55, 753–767 (2023). https://doi.org/10.1038/s41588-023-01375-1
+https://www.nature.com/articles/s41588-023-01375-1.
+2. Answer the following questions
+a. What is the medically relevant insight from the article?
+(1) ncMono is reduced in severe COVID-19 patients and exhibits abnormal cellular functions.
+(2) IFN-γ response plays an important role in the severity of COVID-19.
+(3) Host genetic risk is associated with the severity of COVID-19.
+b. Which genomics technology/ technologies were used?
+(1) Single-cell RNA sequencing (scRNA-seq)
+(2) Genome-wide association studies (GWAS)
+(3) T Cell receptor (TCR) and B cell receptor (BCR) sequencing
+3. Further related research questions
+a. List and explain at least three questions/ hypotheses you can think of that
+extend the analysis presented in the paper.
+(1) ncMono Is there a causal relationship between dysfunction and the severity of COVID-19, and what are the reasons for the decrease in ncMono? 
+(2) Is the effect of IFNAR2 gene variation (rs13050728) on ncMono function clinically significant?
+(3) In addition to ncMono and the IFN-γ signaling pathway, are there other immune cells or molecules involved in the severity of COVID-19, and how do they interact with ncMono? 
 
+Task 2 - Git repositories and R Markdown
+Git repository: 
